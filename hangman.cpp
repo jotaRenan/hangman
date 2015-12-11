@@ -16,6 +16,7 @@ using namespace std;
 #define white "\033[22;37m"
 #define yellow "\033[01;33m"
 #define SIZE 29858 //numero de palavras
+#define EXIT 99
 
 void gotoxy(int coluna, int linha) {
         COORD point;
@@ -48,6 +49,9 @@ void Hangman::typeWord(){
   cin >> palavra;
   convert(palavra);
   system("cls");
+  do {
+    inserir();
+  } while (continua());
 }
 
 void Hangman::pickWord(){
@@ -67,6 +71,9 @@ void Hangman::pickWord(){
   palavra=myArray[choice];
   convert(palavra);
   system("cls");
+  do {
+    inserir();
+  } while (continua());
 }
 
 void Hangman::inserir() {
@@ -108,10 +115,11 @@ void Hangman::convert(string& s) {
 
 void Hangman::check(char letra) {
   bool achou=false;
-  for (int j=0; j<listados.size(); j++)
+  for (int j=0; j<listados.size(); j++) {
     if(letra==listados[j]) {
       achou=true;
     }
+  }
   if (achou==true) {
     Beep(100,400);
     inserir();
@@ -142,6 +150,7 @@ void Hangman::ending(int situ) {
   cout << "O jogo acabou. Voce " << status << white <<". A palavra era: " << palavra;
   gotoxy(0,22);
   Beep(2000,750);
+  getch();
 }
 
 int Hangman::continua(){
@@ -166,14 +175,37 @@ void Hangman::status() {
   cout << white << "\t\tVidas: "; hearts(); cout << "\t\tAcertos: " << acertos;
 }
 
-
-
+int menu() {
+  int op;
+  system("cls");
+  cin.ignore();
+  gotoxy(28, 12); cout << "1 - Inserir Palavra.";
+  gotoxy(28, 13); cout << "2 - Palavra pre-definida.";
+  gotoxy(28, 14); cout << "99 - Sair.";
+  gotoxy(25, 16); cout << "Insira opcao: ";
+  cin >> op;
+  system("cls");
+  return op;
+}
 
 main () {
   Hangman partida;
-  //partida.typeWord();
+  /*//partida.typeWord();
   partida.pickWord();
   do {
     partida.inserir();
   } while (partida.continua());
+  */
+  int op;
+  do {
+    op=menu();
+    switch (op) {
+      case 1: partida.typeWord(); break;
+      case 2: partida.pickWord(); break;
+      case EXIT: break;
+      default: cout << "operacao invalida";
+    }
+  } while (op!=EXIT);
+
+
 }
